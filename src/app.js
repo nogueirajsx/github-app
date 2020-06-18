@@ -15,13 +15,19 @@ class App extends Component {
     }
   }
 
+  getGitHubApiUrl (username, type) {
+    const internalUser = username ? `/${username}` : ''
+    const internalType = type ? `/${type}` : ''
+    return `https://api.github.com/users${internalUser}${internalType}`
+  }
+
   handleSearch (e) {
     const value = e.target.value
     const keyCode = e.which || e.keyCode
     const ENTER = 13
 
     if(keyCode === ENTER){
-    axios.get(`https://api.github.com/users/${value}`)
+    axios.get(this.getGitHubApiUrl(value))
       .then((result) => {
         const data = result.data
         this.setState({
@@ -32,7 +38,9 @@ class App extends Component {
             repos: data.public_repos,
             followers: data.followers,
             following: data.following 
-          }  
+          },
+          repos: [],
+          starred: []  
         })
       })
     }
@@ -40,7 +48,8 @@ class App extends Component {
   
   getRepos (type) {
     return (e) => {
-      axios.get(`https://api.github.com/users/nogueirajsx/${type}`)
+      const username = this.state.userinfo.login
+      axios.get(this.getGitHubApiUrl(username, type))
         .then((result) => {
           const data = result.data
           this.setState({
