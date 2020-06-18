@@ -9,7 +9,12 @@ class App extends Component {
     super()
     this.state = {
       userinfo: {
-        username: "Rodrigo Nogueira"
+        username: "Rodrigo Nogueira",
+        photo: "https://avatars3.githubusercontent.com/u/44399537?v=4",
+        login: "nogueirajsx",
+        repos: 12,
+        followers: 10,
+        following: 13
       }, 
       repos: [{
         name: "Repo",
@@ -25,6 +30,7 @@ class App extends Component {
   render() {
     return <AppContent 
       userinfo={this.state.userinfo}
+      photo={this.state.photo}
       repos={this.state.repos}
       starred={this.state.starred}
     />
