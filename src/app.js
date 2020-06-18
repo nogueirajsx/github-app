@@ -15,10 +15,6 @@ class App extends Component {
     }
   }
 
-  getRepos () {
-    axios.get(`https://api.github.com/users/${this.state.userinfo.login}`)
-  }
-
   handleSearch (e) {
     const value = e.target.value
     const keyCode = e.which || e.keyCode
@@ -41,7 +37,21 @@ class App extends Component {
       })
     }
   }
-
+  
+  getRepos (type) {
+    return (e) => {
+      axios.get(`https://api.github.com/users/nogueirajsx/${type}`)
+        .then((result) => {
+          const data = result.data
+          this.setState({
+            [type]: data.map((repo) => ({
+                name: repo.name,
+                link: repo.html_url
+            }))
+          }) 
+        })
+    }
+  }
   render() {
     return <AppContent 
       userinfo={this.state.userinfo}
@@ -49,8 +59,8 @@ class App extends Component {
       repos={this.state.repos}
       starred={this.state.starred}
       handleSearch={(e) => this.handleSearch(e)}
-      getRepos={() => this.getRepos()}
-      getStarred={() => console.log('get starred')}
+      getRepos={this.getRepos('repos')}
+      getStarred={this.getRepos('starred')}
     />
   }
 }
