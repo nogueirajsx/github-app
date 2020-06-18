@@ -1,29 +1,40 @@
 'use strict'
 
 import React, {Component} from 'react'
+import axios from 'axios'
 
 import AppContent from './components/app-content'
 
 class App extends Component {
   constructor(){
     super()
-    this.state = {
-      userinfo: {
-        username: "Rodrigo Nogueira",
-        photo: "https://avatars3.githubusercontent.com/u/44399537?v=4",
-        login: "nogueirajsx",
-        repos: 12,
-        followers: 10,
-        following: 13
-      }, 
-      repos: [{
-        name: "Repo",
-        link: "#"
-      }],
-      starred: [{
-        name: "Repo",
-        link: "#"
-      }]
+    this.state = { 
+      userinfo: null,
+      repos: [],
+      starred: []
+    }
+  }
+
+  handleSearch (e) {
+    const value = e.target.value
+    const keyCode = e.which || e.keyCode
+    const ENTER = 13
+
+    if(keyCode === ENTER){
+    axios.get(`https://api.github.com/users/${value}`)
+      .then((result) => {
+        const data = result.data
+        this.setState({
+          userinfo: {
+            username: data.name,
+            photo: data.avatar_url,
+            login: data.login,
+            repos: data.public_repos,
+            followers: data.followers,
+            following: data.following 
+          }  
+        })
+      })
     }
   }
 
@@ -33,6 +44,7 @@ class App extends Component {
       photo={this.state.photo}
       repos={this.state.repos}
       starred={this.state.starred}
+      handleSearch={(e) => this.handleSearch(e)}
     />
   }
 }
