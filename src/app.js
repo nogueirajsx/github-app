@@ -15,6 +15,10 @@ class App extends Component {
     }
   }
 
+  getRepos () {
+    axios.get(`https://api.github.com/users/${this.state.userinfo.login}`)
+  }
+
   handleSearch (e) {
     const value = e.target.value
     const keyCode = e.which || e.keyCode
@@ -45,6 +49,8 @@ class App extends Component {
       repos={this.state.repos}
       starred={this.state.starred}
       handleSearch={(e) => this.handleSearch(e)}
+      getRepos={() => this.getRepos()}
+      getStarred={() => console.log('get starred')}
     />
   }
 }
