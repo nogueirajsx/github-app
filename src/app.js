@@ -25,9 +25,11 @@ class App extends Component {
     const value = e.target.value
     const keyCode = e.which || e.keyCode
     const ENTER = 13
+    const target = e.target
 
     if(keyCode === ENTER){
-    axios.get(this.getGitHubApiUrl(value))
+      target.disabled = true
+      axios.get(this.getGitHubApiUrl(value))
       .then((result) => {
         const data = result.data
         this.setState({
@@ -42,7 +44,8 @@ class App extends Component {
           repos: [],
           starred: []  
         })
-      })
+      }).then(() => {
+        target.disabled =false})
     }
   }
   
