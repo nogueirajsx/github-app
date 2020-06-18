@@ -11,7 +11,8 @@ class App extends Component {
     this.state = { 
       userinfo: null,
       repos: [],
-      starred: []
+      starred: [],
+      isFetching: false
     }
   }
 
@@ -25,10 +26,9 @@ class App extends Component {
     const value = e.target.value
     const keyCode = e.which || e.keyCode
     const ENTER = 13
-    const target = e.target
 
     if(keyCode === ENTER){
-      target.disabled = true
+      this.setState({isFetching: true})
       axios.get(this.getGitHubApiUrl(value))
       .then((result) => {
         const data = result.data
@@ -44,8 +44,8 @@ class App extends Component {
           repos: [],
           starred: []  
         })
-      }).then(() => {
-        target.disabled =false})
+      })
+        .then(() => this.setState({ isFetching: false }))
     }
   }
   
@@ -70,6 +70,7 @@ class App extends Component {
       photo={this.state.photo}
       repos={this.state.repos}
       starred={this.state.starred}
+      isFetching={this.state.isFetching}
       handleSearch={(e) => this.handleSearch(e)}
       getRepos={this.getRepos('repos')}
       getStarred={this.getRepos('starred')}
